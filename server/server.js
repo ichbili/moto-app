@@ -5,6 +5,7 @@ const {ObjectID} = require('mongodb');
 
 var {mongoose} = require('./db/mongoose');
 var {Article} = require('./models/article');
+var {User} = require('./models/user');
 
 var app = express();
 const port = process.env.PORT || 3000; // process.env.PORT pour Heroku
@@ -104,6 +105,28 @@ router.patch('/articles/:article_id', (req, res) => {
   }).catch((e) => {
     res.status(400).json({message: 'Problem while updating the doc in the db'});
   });
+});
+
+router.post('/user', (req, res) => {
+  // var article = new Article({
+  //   titreArticle: req.body.tarticle,
+  //   smallText: req.body.textsmall,
+  //   imgArticle: req.body.imgurl
+  // });
+//   var object = { 'a': 1, 'b': '2', 'c': 3 };
+//
+// _.pick(object, ['a', 'c']);
+// => { 'a': 1, 'c': 3 }
+  var userReq = _.pick(req.body, ['email', 'password', 'access', 'token']);
+  var user = new User({email: userReq.email, password: userReq.password, tokens: [{access: userReq.access, token: userReq.token}]});
+  var user = new User(_.pick(req.body, ['email', 'password']));
+  user.tokens = [_.pick(req.body, ['access', 'token'])];
+  console.log(user);
+  user.save().then((doc) => {
+     res.send(doc);
+   }, (e) => {
+     res.status(400).send(e);
+   });
 });
 
 // START THE SERVER
