@@ -1,7 +1,13 @@
 var mongoose = require('mongoose');
 
-var Actu = mongoose.model('Actu', {
-  titreActu: {
+var Schema = mongoose.Schema;
+
+var BearSchema   = new Schema({
+    name: String
+});
+
+var ArticleSchema = new Schema({
+  titreArticle: {
     type: String,
     required: true,
     minlength: 1,
@@ -12,7 +18,7 @@ var Actu = mongoose.model('Actu', {
     minlength: 1,
     trim: true
   },
-  imgActu: {
+  imgArticle: {
     type: String,
     required: true,
     minlength: 1,
@@ -28,4 +34,5 @@ var Actu = mongoose.model('Actu', {
   }
 });
 
-module.exports = {Actu};
+var Article = mongoose.model('Article', ArticleSchema);
+module.exports = {Article};
